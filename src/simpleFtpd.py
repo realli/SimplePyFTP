@@ -4,12 +4,15 @@
 # md5 hash setting
 import os
 import logging
+import logging.config
 from hashlib import md5
 
 from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
-from pyftpdlib.handlers import FTPHandler
+#from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
 from pyftpdlib._compat import b
+
+from simpleHandler import SimpleHandler
 
 class DummyMD5Authorizer(DummyAuthorizer):
   def validate_authentication(self, username, password, handler):
@@ -28,13 +31,11 @@ def main():
   hash = md5(b('12345')).hexdigest()
   authorizer.add_user('user', hash, '/home/leo/FTPRoot', perm='elradfmwM')
 
-  handler = FTPHandler
+  handler = SimpleHandler 
   handler.authorizer = authorizer
 
   # loggin setting
-  #logging.basicConfig(filename='/home/leo/ftpd.log', level=logging.DEBUG)
-  logging.basicConfig(level=logging.DEBUG)
-
+  
   handler.banner = "Hello , my friend"
   address = ('', 2200)
   server = FTPServer(address, handler)
