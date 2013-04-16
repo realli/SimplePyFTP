@@ -14,6 +14,7 @@ from pyftpdlib.servers import FTPServer
 from pyftpdlib._compat import b
 
 from ftpd_handlers import SimpleHandler
+import ftpd_users
 
 class DummyMD5Authorizer(DummyAuthorizer):
   def validate_authentication(self, username, password, handler):
@@ -29,8 +30,7 @@ def main():
   authorizer = DummyMD5Authorizer()
 
   # add users
-  hash = md5(b('12345')).hexdigest()
-  authorizer.add_user('user', hash, '/home/leo/FTPRoot', perm='elradfmwM')
+  ftpd_users.addUsers(authorizer)
 
   handler = SimpleHandler 
   handler.authorizer = authorizer
